@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.draper.mapper.StudentMapper">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+
+    <insert id="insertItStudent">
+        INSERT INTO it_mates_table	(create_at, online_id, study_type, start_study_time, daily_link, wish, coach_senior, know_from)
+VALUES (#{createAt}, #{onlineId}, #{studyType}, #{startStudyTime}, #{dailyLink}, #{wish}, #{coachSenior}, #{knowFrom});
+    </insert>
+
+    <insert id="insertSimpleStudent">
+        INSERT INTO simple_mates_table (create_at, online_id, name, qq, graduate_school)
+VALUES (#{createAt}, #{onlineId}, #{name}, #{qq}, #{graduateSchool});
+    </insert>
+
+    <!--resultMap="studentResultMap"-->
+    <select id="selectByName" resultType="com.draper.entity.Student">
+        SELECT it_mates_table.create_at, it_mates_table.update_at, it_mates_table.online_id, study_type, start_study_time, daily_link, wish, coach_senior, know_from, name, qq, graduate_school
+        FROM simple_mates_table,it_mates_table
+        WHERE simple_mates_table.online_id = it_mates_table.online_id
+        AND simple_mates_table.name = #{name};
+    </select>
+
+    <select id="selectByOnlineId" resultType="com.draper.entity.Student">
+        SELECT it_mates_table.create_at, it_mates_table.update_at, it_mates_table.online_id, study_type, start_study_time, daily_link, wish, coach_senior, know_from, name, qq, graduate_school
+        FROM simple_mates_table,it_mates_table
+        WHERE simple_mates_table.online_id = it_mates_table.online_id
+        AND it_mates_table.online_id = #{onlineId};
+    </select>
+
+    <!--<resultMap id="studentResultMap" type="java.util.Map">-->
+    <!--<result property="createAt" column="create_at" jdbcType="BIGINT"-->
+    <!--typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>-->
+    <!--<result property="updateAt" column="update_at" jdbcType="BIGINT"-->
+    <!--typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>-->
+    <!--<result property="onlineId" column="online_id" jdbcType="INTEGER"-->
+    <!--typeHandler="org.apache.ibatis.type.IntegerTypeHandler"/>-->
+    <!--<result property="studyType" column="study_type" jdbcType="VARCHAR"-->
+    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
+    <!--<result property="startStudyTime" column="start_study_time" jdbcType="BIGINT"-->
+    <!--typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>-->
+    <!--<result property="dailyLink" column="daily_link" jdbcType="VARCHAR"-->
+    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
+    <!--<result property="wish" column="wish" jdbcType="VARCHAR"-->
+    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
+    <!--<result property="coachSenior" column="coach_senior" jdbcType="VARCHAR"-->
+    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
+    <!--<result property="knowFrom" column="know_from" jdbcType="VARCHAR"-->
+    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
+    <!--<result property="name" column="name" jdbcType="VARCHAR"-->
+    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
+    <!--<result property="qq" column="qq" jdbcType="VARCHAR"-->
+    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
+    <!--<result property="graduateSchool" column="graduate_school" jdbcType="VARCHAR"-->
+    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
+    <!--</resultMap>-->
+
+    <update id="updateWishByName">
+        UPDATE it_mates_table, simple_mates_table
+        SET wish = #{wish}
+        WHERE it_mates_table.online_id = simple_mates_table.online_id
+        AND simple_mates_table.name = #{name};
+    </update>
+
+    <delete id="deleteItStudentByOnlineId">
+        DELETE FROM it_mates_table
+        WHERE online_id = #{onlineId};
+    </delete>
+
+    <delete id="deleteSimpleStudent">
+        DELETE FROM simple_mates_table
+        WHERE online_id = #{onlineId};
+    </delete>
+
+    <insert id="insertItByBatch" parameterType="java.util.List">
+        INSERT INTO it_mates_table (create_at, online_id, study_type, start_study_time,
+        daily_link, wish, coach_senior,know_from)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.createAt,jdbcType=BIGINT}, #{item.onlineId,jdbcType=INTEGER}, #{item.studyType,jdbcType=VARCHAR}, #{item.startStudyTime,jdbcType=LONGVARCHAR},
+            #{item.dailyLink,jdbcType=VARCHAR}, #{item.wish,jdbcType=VARCHAR}, #{item.coachSenior,jdbcType=VARCHAR}, #{item.knowFrom,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <select id="getStudentListChooseEntity" parameterType="com.draper.entity.Student">
+        select * FROM it_mates_table
+        <where>
+            <choose>
+                <when test="name != null">
+                    ....
+                </when>
+            </choose>
+            <choose>
+                <when test="online_id != null">
+                    ....
+                </when>
+            </choose>
+        </where>
+    </select>
+
+
+</mapper>
