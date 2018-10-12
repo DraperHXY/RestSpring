@@ -30,32 +30,32 @@ VALUES (#{createAt}, #{onlineId}, #{name}, #{qq}, #{graduateSchool});
         AND it_mates_table.online_id = #{onlineId};
     </select>
 
-    <!--<resultMap id="studentResultMap" type="java.util.Map">-->
-    <!--<result property="createAt" column="create_at" jdbcType="BIGINT"-->
-    <!--typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>-->
-    <!--<result property="updateAt" column="update_at" jdbcType="BIGINT"-->
-    <!--typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>-->
-    <!--<result property="onlineId" column="online_id" jdbcType="INTEGER"-->
-    <!--typeHandler="org.apache.ibatis.type.IntegerTypeHandler"/>-->
-    <!--<result property="studyType" column="study_type" jdbcType="VARCHAR"-->
-    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
-    <!--<result property="startStudyTime" column="start_study_time" jdbcType="BIGINT"-->
-    <!--typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>-->
-    <!--<result property="dailyLink" column="daily_link" jdbcType="VARCHAR"-->
-    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
-    <!--<result property="wish" column="wish" jdbcType="VARCHAR"-->
-    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
-    <!--<result property="coachSenior" column="coach_senior" jdbcType="VARCHAR"-->
-    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
-    <!--<result property="knowFrom" column="know_from" jdbcType="VARCHAR"-->
-    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
-    <!--<result property="name" column="name" jdbcType="VARCHAR"-->
-    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
-    <!--<result property="qq" column="qq" jdbcType="VARCHAR"-->
-    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
-    <!--<result property="graduateSchool" column="graduate_school" jdbcType="VARCHAR"-->
-    <!--typeHandler="org.apache.ibatis.type.StringTypeHandler"/>-->
-    <!--</resultMap>-->
+    <resultMap id="studentResultMap" type="java.util.Map">
+        <result property="createAt" column="create_at" jdbcType="BIGINT"
+                typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>
+        <result property="updateAt" column="update_at" jdbcType="BIGINT"
+                typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>
+        <result property="onlineId" column="online_id" jdbcType="INTEGER"
+                typeHandler="org.apache.ibatis.type.IntegerTypeHandler"/>
+        <result property="studyType" column="study_type" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+        <result property="startStudyTime" column="start_study_time" jdbcType="BIGINT"
+                typeHandler="org.apache.ibatis.type.BigIntegerTypeHandler"/>
+        <result property="dailyLink" column="daily_link" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+        <result property="wish" column="wish" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+        <result property="coachSenior" column="coach_senior" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+        <result property="knowFrom" column="know_from" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+        <result property="name" column="name" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+        <result property="qq" column="qq" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+        <result property="graduateSchool" column="graduate_school" jdbcType="VARCHAR"
+                typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+    </resultMap>
 
     <update id="updateWishByName">
         UPDATE it_mates_table, simple_mates_table
@@ -79,8 +79,10 @@ VALUES (#{createAt}, #{onlineId}, #{name}, #{qq}, #{graduateSchool});
         daily_link, wish, coach_senior,know_from)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.createAt,jdbcType=BIGINT}, #{item.onlineId,jdbcType=INTEGER}, #{item.studyType,jdbcType=VARCHAR}, #{item.startStudyTime,jdbcType=LONGVARCHAR},
-            #{item.dailyLink,jdbcType=VARCHAR}, #{item.wish,jdbcType=VARCHAR}, #{item.coachSenior,jdbcType=VARCHAR}, #{item.knowFrom,jdbcType=VARCHAR})
+            (#{item.createAt,jdbcType=BIGINT}, #{item.onlineId,jdbcType=INTEGER}, #{item.studyType,jdbcType=VARCHAR},
+            #{item.startStudyTime,jdbcType=LONGVARCHAR},
+            #{item.dailyLink,jdbcType=VARCHAR}, #{item.wish,jdbcType=VARCHAR}, #{item.coachSenior,jdbcType=VARCHAR},
+            #{item.knowFrom,jdbcType=VARCHAR})
         </foreach>
     </insert>
 
@@ -98,6 +100,20 @@ VALUES (#{createAt}, #{onlineId}, #{name}, #{qq}, #{graduateSchool});
                 </when>
             </choose>
         </where>
+    </select>
+
+    <update id="updateStudentKeyById">
+        UPDATE it_mates_table, simple_mates_table
+        SET ${key} = #{value}
+        WHERE it_mates_table.online_id = #{onlineId}
+        AND  it_mates_table.online_id = simple_mates_table.online_id;
+    </update>
+
+    <select id="selectAllStudent" resultType="com.draper.entity.Student">
+        SELECT it_mates_table.online_id, study_type, start_study_time, daily_link, wish, coach_senior, know_from, name, qq, graduate_school
+        FROM it_mates_table, simple_mates_table
+        WHERE 1 = 1
+        AND it_mates_table.online_id = simple_mates_table.online_id
     </select>
 
 

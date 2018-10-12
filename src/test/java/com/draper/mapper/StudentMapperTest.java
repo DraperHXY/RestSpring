@@ -25,7 +25,7 @@ public class StudentMapperTest extends BaseTest {
     @Autowired
     private StudentMapper studentMapper;
 
-    @Before
+    @Test
     public void testInsertStudent() throws ParseException {
         logger.warn("采用 MyBatis 插入");
         logger.info("current time {}", new Date());
@@ -102,7 +102,7 @@ public class StudentMapperTest extends BaseTest {
 //        }
 //    }
 
-    @After
+//    @After
     public void testDeleteStudentByOnlineId() {
         logger.warn("采用 MyBatis 删除");
         logger.info("current time {}", new Date());
@@ -164,4 +164,18 @@ public class StudentMapperTest extends BaseTest {
 //
 //        studentMapper.insertItByBatch(students);
 //    }
+
+    @Test
+    public void testUpdateStudentKeyById(){
+        studentMapper.updateStudentKeyById(4975, "know_from", "知乎");
+    }
+
+    @Test
+    public void testSelectAllStudent(){
+        List<Student> students = studentMapper.selectAllStudent();
+        for (int i = 0; i < students.size(); i++) {
+            System.out.println(students.get(i).getName());
+        }
+    }
+
 }

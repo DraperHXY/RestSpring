@@ -1,9 +1,11 @@
-package com.draper.entity;
+package com.draper.web.to.v1;
 
-public class Student {
+import com.draper.entity.Student;
 
-    private long createAt;
-    private long updateAt;
+public class StudentGet {
+
+    private int code;
+    private String message;
     private int onlineId;
     private String studyType;
     private long startStudyTime;
@@ -15,7 +17,19 @@ public class Student {
     private String qq;
     private String graduateSchool;
 
-    public Student() {
+    public StudentGet(int code, String message, Student student){
+        this.code = code;
+        this.message = message;
+        onlineId = student.getOnlineId();
+        studyType = student.getStudyType();
+        startStudyTime = student.getStartStudyTime();
+        dailyLink = student.getDailyLink();
+        wish = student.getWish();
+        coachSenior = student.getCoachSenior();
+        knowFrom = student.getKnowFrom();
+        name = student.getName();
+        qq = student.getQq();
+        graduateSchool = student.getGraduateSchool();
     }
 
     public int getOnlineId() {
@@ -98,23 +112,19 @@ public class Student {
         this.graduateSchool = graduateSchool;
     }
 
-    public long getCreateAt() {
-        return createAt;
+    public int getCode() {
+        return code;
     }
 
-    public void setCreateAt(long createAt) {
-        this.createAt = createAt;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public long getUpdateAt() {
-        return updateAt;
+    public String getMessage() {
+        return message;
     }
 
-    public void setUpdateAt(long updateAt) {
-        this.updateAt = updateAt;
-    }
-
-    public enum KEY{
-        STUDY_TYPE, DAILY_LINK, COACH_SENIOR
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

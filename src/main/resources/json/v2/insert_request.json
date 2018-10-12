@@ -1,0 +1,20 @@
+//post localhost:8080/RestSpring/v2/student/
+{
+  "code": 200,
+  "message": "请求成功",
+  "datas": [
+    {
+      "onlineId": 333,
+      "studyType": "JAVA工程师",
+      "startStudyTime": 1538409600000,
+      "dailyLink": "http://www.jnshu.com/school/86/daily",
+      "wish": "如果我不能在IT特训营拼尽全力，为自己以后的修行路上打好基础，就让我变胖2k斤！",
+      "coachSenior": "桂伟腾",
+      "knowFrom": "知乎",
+      "name": "贾伟奇",
+      "qq": "860733414",
+      "graduateSchool": "北京YD大学"
+    }
+  ]
+}
+

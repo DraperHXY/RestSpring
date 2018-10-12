@@ -13,20 +13,20 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class StudentDaoTest extends BaseTest{
+public class StudentDaoTest extends BaseTest {
     private Logger logger = LoggerFactory.getLogger(String.valueOf(this));
 
     @Autowired
     private StudentDao studentDao;
 
-    @Test
-    public void testInsertItStudent() throws ParseException {
+//    @Test
+    public void testInsertItStudent(int i) throws ParseException {
         logger.warn("采用 JdbcTemplate 插入");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         long time_long = sdf.parse("2018-10-2").getTime();
         Student student = new Student();
         student.setCreateAt(System.currentTimeMillis());
-        student.setOnlineId(4975);
+        student.setOnlineId(i);
         student.setStudyType("JAVA工程师");
         student.setStartStudyTime(time_long);
         student.setDailyLink("http://www.jnshu.com/school/86/daily");
@@ -42,27 +42,16 @@ public class StudentDaoTest extends BaseTest{
 
     }
 
-//    @Test
-//    public void testTryCatch() throws ParseException {
-//
-//        for (int i = 0; i < 1000000; i++) {
-//            testInsertItStudent();
-//            if (i == 1000){
-//                try {
-//                    throw new SQLException("50 万条数据了");
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                } finally {
-//                    logger.error("不干了，数据库满了");
-//                    return;
-//
-//                }
-//            }
-//        }
-//
-//    }
+    @Test
+    public void testTryCatch() throws ParseException {
 
-    @After
+        for (int i = 10; i < 50; i++) {
+            testInsertItStudent(i);
+        }
+    }
+
+
+    @Test
     public void testDeleteStudent() {
         logger.warn("采用 JdbcTemplate 删除");
         studentDao.deleteItStudentByOnlineId(4975);

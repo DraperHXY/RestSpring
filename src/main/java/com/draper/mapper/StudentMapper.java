@@ -26,4 +26,8 @@ public interface StudentMapper {
 
     void insertItByBatch(List<Student> students);
 
+    void updateStudentKeyById(@Param("onlineId") int onlineId, @Param("key") String key, @Param("value") Object value);
+
+    List<Student> selectAllStudent();
+
 }

@@ -3,6 +3,8 @@ package com.draper.service;
 import com.draper.entity.Student;
 import org.springframework.dao.DuplicateKeyException;
 
+import java.util.List;
+
 
 public interface StudentService {
 
@@ -14,5 +16,8 @@ public interface StudentService {
 
     void deleteStudent(Student student) throws NullPointerException;
 
+    void updateStudentByKey(int onlineId, Student.KEY key, Object value) throws Exception;
+
+    List<Student> selectAllStudent();
 
 }

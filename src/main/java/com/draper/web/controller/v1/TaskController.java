@@ -1,4 +1,4 @@
-package com.draper.web;
+package com.draper.web.controller.v1;
 
 import com.draper.service.OneService;
 import com.draper.service.TestService;

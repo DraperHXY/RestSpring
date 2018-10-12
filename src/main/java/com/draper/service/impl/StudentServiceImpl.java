@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -49,5 +51,29 @@ public class StudentServiceImpl implements StudentService {
         }
         studentMapper.deleteSimpleStudent(student.getOnlineId());
         studentMapper.deleteItStudentByOnlineId(student.getOnlineId());
+    }
+
+    @Override
+    public void updateStudentByKey(int onlineId, Student.KEY key, Object value) throws Exception {
+        switch (key) {
+            case STUDY_TYPE:
+                studentMapper.updateStudentKeyById(onlineId,"study_type", value);
+                break;
+            case DAILY_LINK:
+                studentMapper.updateStudentKeyById(onlineId, "daily_link", value);
+                break;
+            case COACH_SENIOR:
+                studentMapper.updateStudentKeyById(onlineId, "coach_senior", value);
+                break;
+            default:
+                throw new Exception("不存在的 key");
+
+        }
+
+    }
+
+    @Override
+    public List<Student> selectAllStudent() {
+        return studentMapper.selectAllStudent();
     }
 }
