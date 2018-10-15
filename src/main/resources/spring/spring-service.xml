@@ -21,4 +21,16 @@
 
     <!-- 配置基于注解的声明式事务 -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--<bean id="messageSource"-->
+          <!--class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
+        <!--<property name="basenames">-->
+            <!--<list>-->
+                <!--<value>spring.message</value>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--<property name="fileEncodings" value="utf-8"/>-->
+        <!--<property name="cacheSeconds" value="120"/>-->
+    <!--</bean>-->
+
 </beans>

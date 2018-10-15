@@ -27,6 +27,7 @@ public class StudentController {
 
     private Logger logger = LoggerFactory.getLogger(String.valueOf(this));
 
+    //获取全部的学生 在界面显示
     @RequestMapping(value = "/student/list", method = RequestMethod.GET)
     public ModelAndView showStudentList() {
 
@@ -37,50 +38,46 @@ public class StudentController {
         return mav;
     }
 
-    @RequestMapping(value = "/student/page/insert", method = RequestMethod.GET)
-    public String showStudentInsertPage() {
-        return "page/insert";
-    }
-
-
-    @RequestMapping(value = "/student", method = RequestMethod.POST)
-    public ModelAndView insertStudent(@RequestBody Student student) {
-        ModelAndView mav = new ModelAndView("page/success");
-        logger.warn(String.valueOf(student.getName()));
-        studentService.insertStudent(student);
-        return mav;
-
-    }
-
-    //    ResponseBody 和 RequestBody 都是标记请求参数和返回参数的类型
+    //    获取指定 onlineId 的学生信息
+//    ResponseBody 和 RequestBody 都是标记请求参数和返回参数的类型
     @ResponseBody
-    @RequestMapping(value = "/student/{id}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-    public Object selectStudent(@RequestBody int onlineId) {
-        StudentGet student = new StudentGet(1, "ok", studentService.selectByOnlineId(onlineId));
-
-
+    @RequestMapping(value = "/student/{onlineId}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public Object showStudentInsertPage(@PathVariable int onlineId) {
+        Student student = studentService.selectByOnlineId(onlineId);
         return student;
     }
 
+    //插入一个学生
     @ResponseBody
-    @RequestMapping(value = "/student", method = RequestMethod.PATCH)
-    public String updateStudent(@RequestBody String key, @RequestBody int onlineId, Object value) {
+    @RequestMapping(value = "/student", method = RequestMethod.POST)
+    public Object insertStudent(@RequestBody Student student) {
+        // TODO: 2018/10/15 校验
+        ModelAndView mav = new ModelAndView("page/success");
+        logger.info(String.valueOf("插入学员"));
+        studentService.insertStudent(student);
+        return mav;
+    }
+
+    @RequestMapping(value = "/student/{onlineId}/{key}", method = RequestMethod.PATCH)
+    public ModelAndView updateStudent(@PathVariable int onlineId, @PathVariable String key, String value) {
+        ModelAndView mav =new ModelAndView("page/success");
         try {
+            logger.warn("key = {}, value = {} ", key, value);
             switch (key) {
                 case "studyType":
-//                    studentService.updateStudentByKey(onlineId, STUDY_TYPE, value);
+                    studentService.updateStudentByKey(onlineId, STUDY_TYPE, value);
                     break;
                 case "dailyLink":
-//                    studentService.updateStudentByKey(onlineId, DAILY_LINK, value);
+                    studentService.updateStudentByKey(onlineId, DAILY_LINK, value);
                     break;
                 case "coachSenior":
-//                    studentService.updateStudentByKey(onlineId, COACH_SENIOR, value);
+                    studentService.updateStudentByKey(onlineId, COACH_SENIOR, value);
                     break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return "student/update";
+            return mav;
         }
     }
 
@@ -92,7 +89,8 @@ public class StudentController {
 
     //required = false 可以不传参数， required = true 必须传参数
     @ResponseBody
-    @RequestMapping(value = "/student/page/{page}" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/student/page/{page}", method = RequestMethod.GET)
+
     public PageInfo<Student> getList(
             @PathVariable int page,
             @RequestParam(required = false, defaultValue = "10") int rows) {

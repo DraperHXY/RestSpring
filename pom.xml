@@ -213,6 +213,12 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>atg.taglib.json</groupId>
+            <artifactId>json-taglib</artifactId>
+            <version>0.4.1</version>
+        </dependency>
+
         <!-- 2) 分页 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
