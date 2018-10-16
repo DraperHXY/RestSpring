@@ -52,7 +52,6 @@
         <!--</property>-->
     </bean>
 
-
     <!-- 3.配置jsp 显示ViewResolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -69,6 +68,7 @@
         <property name="validationMessageSource" ref="messageSource"/>
     </bean>
 
+    <!-- 6.MessageSource 国际化 -->
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basenames">
@@ -80,17 +80,5 @@
         <property name="fileEncodings" value="utf-8"/>
         <property name="cacheSeconds" value="120"/>
     </bean>
-
-    <!-- 6.MessageSource 国际化 -->
-    <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
-        <!--&lt;!&ndash;<property name="basenames">&ndash;&gt;-->
-            <!--&lt;!&ndash;<list>&ndash;&gt;-->
-                <!--&lt;!&ndash;<value>classpath:spring/messages</value>&ndash;&gt;-->
-            <!--&lt;!&ndash;</list>&ndash;&gt;-->
-        <!--&lt;!&ndash;</property>&ndash;&gt;-->
-        <!--<property name="basename" value="classpath:resource/messages"/>-->
-        <!--<property name="defaultEncoding" value="utf-8"/>-->
-        <!--<property name="cacheSeconds" value="120"/>-->
-    <!--</bean>-->
 
 </beans>

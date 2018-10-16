@@ -53,10 +53,9 @@ public class StudentController {
 //    ResponseBody 和 RequestBody 都是标记请求参数和返回参数的类型
     @ResponseBody
     @RequestMapping(value = "/student/{onlineId}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-    public Object showStudentInsertPage(@PathVariable int onlineId) {
+    public Map showStudentInsertPage(@PathVariable int onlineId) {
         Student student = studentService.selectByOnlineId(onlineId);
-//        return responseTo.msg("success", student);
-        return student;
+        return responseTo.msg("success", student);
     }
 
     //插入一个学生
@@ -66,19 +65,17 @@ public class StudentController {
 
         if (result.hasErrors()) {
             String errorMessage = result.getFieldError().getDefaultMessage();
-            String msg = messageSource.getMessage(errorMessage, null, Locale.CHINA);
-            logger.warn("插入失败，失败信息：{}", msg);
             return responseTo.msg("failed");
         } else {
-            logger.info(String.valueOf("插入学员"));
             studentService.insertStudent(student);
             return responseTo.msg("success");
         }
 
     }
 
+    @ResponseBody
     @RequestMapping(value = "/student/{onlineId}/{key}", method = RequestMethod.PATCH)
-    public String updateStudent(@PathVariable int onlineId, @PathVariable String key, String value) {
+    public Map updateStudent(@PathVariable int onlineId, @PathVariable String key, String value) {
         String msg = "success";
         try {
             logger.warn("key = {}, value = {} ", key, value);
@@ -97,8 +94,7 @@ public class StudentController {
             msg = "failed";
             e.printStackTrace();
         } finally {
-//            return responseTo.msg(msg);
-            return msg;
+            return responseTo.msg(msg);
         }
     }
 
@@ -110,7 +106,7 @@ public class StudentController {
 
     //required = false 可以不传参数， required = true 必须传参数
     @RequestMapping(value = "/student/page/{page}", method = RequestMethod.GET)
-    public String getList(
+    public Map getList(
             @PathVariable int page,
             @RequestParam(required = false, defaultValue = "10") int rows) {
 
@@ -120,8 +116,7 @@ public class StudentController {
         List<Student> students = studentService.selectAllStudent();
         PageInfo<Student> pageInfo = new PageInfo<>(students);
 
-//        return responseTo.msg("success", pageInfo);
-        return "";
+        return responseTo.msg("success", pageInfo);
 
     }
 
