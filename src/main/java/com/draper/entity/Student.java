@@ -1,18 +1,45 @@
 package com.draper.entity;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Student {
 
     private long createAt;
     private long updateAt;
+
+//    @Length(min = 1, max = 8, message = "{student.onlineId.size}")
+    @NotNull(message = "student.onlineId.notnull")
     private int onlineId;
+
+    @NotBlank(message = "student.studentType.notnull")
     private String studyType;
+
+    @NotNull(message = "student.startStudyTime.notnull")
     private long startStudyTime;
+
+    @NotBlank(message = "student.dailyLink.notnull")
     private String dailyLink;
+
+    @NotBlank(message = "student.wish.notnull")
     private String wish;
+
+    @NotBlank(message = "student.coachSenior.notnull")
     private String coachSenior;
+
+    @NotBlank(message = "student.knowFrom.notnull")
     private String knowFrom;
+
+    @Size(min = 1, max = 20, message = "student.name.size")
     private String name;
+
+    @Size(min = 4, max = 15, message = "student.qq.size")
     private String qq;
+
+    @NotBlank(message = "student.graduate.notnull")
     private String graduateSchool;
 
     public Student() {
@@ -114,7 +141,7 @@ public class Student {
         this.updateAt = updateAt;
     }
 
-    public enum KEY{
+    public enum KEY {
         STUDY_TYPE, DAILY_LINK, COACH_SENIOR
     }
 }

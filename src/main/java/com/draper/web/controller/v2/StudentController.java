@@ -2,17 +2,22 @@ package com.draper.web.controller.v2;
 
 import com.draper.entity.Student;
 import com.draper.service.StudentService;
-import com.draper.web.to.v1.StudentGet;
+import com.draper.web.to.v2.ResponseTo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import static com.draper.entity.Student.KEY.STUDY_TYPE;
 import static com.draper.entity.Student.KEY.DAILY_LINK;
@@ -23,7 +28,13 @@ import static com.draper.entity.Student.KEY.COACH_SENIOR;
 public class StudentController {
 
     @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private ResponseTo responseTo;
 
     private Logger logger = LoggerFactory.getLogger(String.valueOf(this));
 
@@ -44,23 +55,31 @@ public class StudentController {
     @RequestMapping(value = "/student/{onlineId}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public Object showStudentInsertPage(@PathVariable int onlineId) {
         Student student = studentService.selectByOnlineId(onlineId);
+//        return responseTo.msg("success", student);
         return student;
     }
 
     //插入一个学生
     @ResponseBody
     @RequestMapping(value = "/student", method = RequestMethod.POST)
-    public Object insertStudent(@RequestBody Student student) {
-        // TODO: 2018/10/15 校验
-        ModelAndView mav = new ModelAndView("page/success");
-        logger.info(String.valueOf("插入学员"));
-        studentService.insertStudent(student);
-        return mav;
+    public Map insertStudent(@RequestBody @Validated Student student, BindingResult result) {
+
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldError().getDefaultMessage();
+            String msg = messageSource.getMessage(errorMessage, null, Locale.CHINA);
+            logger.warn("插入失败，失败信息：{}", msg);
+            return responseTo.msg("failed");
+        } else {
+            logger.info(String.valueOf("插入学员"));
+            studentService.insertStudent(student);
+            return responseTo.msg("success");
+        }
+
     }
 
     @RequestMapping(value = "/student/{onlineId}/{key}", method = RequestMethod.PATCH)
-    public ModelAndView updateStudent(@PathVariable int onlineId, @PathVariable String key, String value) {
-        ModelAndView mav =new ModelAndView("page/success");
+    public String updateStudent(@PathVariable int onlineId, @PathVariable String key, String value) {
+        String msg = "success";
         try {
             logger.warn("key = {}, value = {} ", key, value);
             switch (key) {
@@ -75,9 +94,11 @@ public class StudentController {
                     break;
             }
         } catch (Exception e) {
+            msg = "failed";
             e.printStackTrace();
         } finally {
-            return mav;
+//            return responseTo.msg(msg);
+            return msg;
         }
     }
 
@@ -88,10 +109,8 @@ public class StudentController {
     }
 
     //required = false 可以不传参数， required = true 必须传参数
-    @ResponseBody
     @RequestMapping(value = "/student/page/{page}", method = RequestMethod.GET)
-
-    public PageInfo<Student> getList(
+    public String getList(
             @PathVariable int page,
             @RequestParam(required = false, defaultValue = "10") int rows) {
 
@@ -101,7 +120,9 @@ public class StudentController {
         List<Student> students = studentService.selectAllStudent();
         PageInfo<Student> pageInfo = new PageInfo<>(students);
 
-        return pageInfo;
+//        return responseTo.msg("success", pageInfo);
+        return "";
+
     }
 
 }

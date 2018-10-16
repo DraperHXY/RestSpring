@@ -18,22 +18,22 @@
         (1)自动注册DefaultAnootationHandlerMapping,AnotationMethodHandlerAdapter
         (2)提供一些列：数据绑定，数字和日期的format @NumberFormat, @DateTimeFormat, xml,json默认读写支持
     -->
-    <mvc:annotation-driven>
+    <mvc:annotation-driven conversion-service="conversionService" validator="validator">
         <!--<mvc:message-converters>-->
-            <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
-                <!--<property name="objectMapper">-->
-                    <!--<bean class="com.fasterxml.jackson.databind.ObjectMapper">-->
-                        <!--<property name="serializationInclusion">-->
-                            <!--<value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>-->
-                        <!--</property>-->
-                    <!--</bean>-->
-                <!--</property>-->
-                <!--<property name="supportedMediaTypes">-->
-                    <!--<list>-->
-                        <!--<value>application/json;charset=UTF-8</value>-->
-                    <!--</list>-->
-                <!--</property>-->
-            <!--</bean>-->
+        <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
+        <!--<property name="objectMapper">-->
+        <!--<bean class="com.fasterxml.jackson.databind.ObjectMapper">-->
+        <!--<property name="serializationInclusion">-->
+        <!--<value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>-->
+        <!--</property>-->
+        <!--</bean>-->
+        <!--</property>-->
+        <!--<property name="supportedMediaTypes">-->
+        <!--<list>-->
+        <!--<value>application/json;charset=UTF-8</value>-->
+        <!--</list>-->
+        <!--</property>-->
+        <!--</bean>-->
         <!--</mvc:message-converters>-->
     </mvc:annotation-driven>
 
@@ -42,6 +42,16 @@
         (2)允许使用"/"做整体映射
      -->
     <mvc:default-servlet-handler/>
+
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <!--<property name="converters">-->
+        <!--<list>-->
+        <!--<bean class="converters.AddressToStringConverter" />-->
+        <!--<bean class="converters.StringToAddressConverter" />-->
+        <!--</list>-->
+        <!--</property>-->
+    </bean>
+
 
     <!-- 3.配置jsp 显示ViewResolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -52,5 +62,35 @@
 
     <!-- 4.扫描web相关的bean -->
     <context:component-scan base-package="com.draper.web"/>
+
+    <!-- 5.校验器 -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:message/msg</value>
+                <value>classpath:message/validation_msg</value>
+            </list>
+        </property>
+        <property name="fileEncodings" value="utf-8"/>
+        <property name="cacheSeconds" value="120"/>
+    </bean>
+
+    <!-- 6.MessageSource 国际化 -->
+    <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
+        <!--&lt;!&ndash;<property name="basenames">&ndash;&gt;-->
+            <!--&lt;!&ndash;<list>&ndash;&gt;-->
+                <!--&lt;!&ndash;<value>classpath:spring/messages</value>&ndash;&gt;-->
+            <!--&lt;!&ndash;</list>&ndash;&gt;-->
+        <!--&lt;!&ndash;</property>&ndash;&gt;-->
+        <!--<property name="basename" value="classpath:resource/messages"/>-->
+        <!--<property name="defaultEncoding" value="utf-8"/>-->
+        <!--<property name="cacheSeconds" value="120"/>-->
+    <!--</bean>-->
 
 </beans>
