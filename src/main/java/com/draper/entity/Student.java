@@ -1,5 +1,6 @@
 package com.draper.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -8,7 +9,10 @@ import javax.validation.constraints.Size;
 
 public class Student {
 
+    @JsonIgnore
     private long createAt;
+
+    @JsonIgnore
     private long updateAt;
 
 //    @Length(min = 1, max = 8, message = "{student.onlineId.size}")

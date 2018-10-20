@@ -99,12 +99,16 @@ public class StudentController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/student", method = RequestMethod.DELETE)
-    public String deleteStudent() {
-        return "student/delete";
+    @RequestMapping(value = "/student/{onlineId}", method = RequestMethod.DELETE)
+    public Map deleteStudent(@PathVariable int onlineId) {
+        Student student = new Student();
+        student.setOnlineId(onlineId);
+        studentService.deleteStudent(student);
+        return responseTo.msg("success");
     }
 
     //required = false 可以不传参数， required = true 必须传参数
+    @ResponseBody
     @RequestMapping(value = "/student/page/{page}", method = RequestMethod.GET)
     public Map getList(
             @PathVariable int page,
