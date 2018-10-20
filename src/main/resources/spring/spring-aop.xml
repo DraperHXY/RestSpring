@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="beforeAllAdvice" class="com.draper.service.advice.TestAdvice"/>
+
+    <bean id="target" class="com.draper.service.impl.StudentServiceImpl"/>
+
+    <bean id="studentService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <!-- 指定代理的接口，多个使用 List 表示 -->
+        <property name="proxyInterfaces" value="com.draper.service.StudentService"/>
+
+        <!-- 指定使用的增强-->
+        <property name="interceptorNames">
+            <list>
+                <value>beforeAllAdvice</value>
+            </list>
+        </property>
+
+        <!-- 对哪个 bean 进行代理 -->
+        <property name="target" ref="target"/>
+    </bean>
+
+</beans>
