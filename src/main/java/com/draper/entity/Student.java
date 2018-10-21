@@ -148,4 +148,9 @@ public class Student {
     public enum KEY {
         STUDY_TYPE, DAILY_LINK, COACH_SENIOR
     }
+
+    @Override
+    public String toString() {
+        return "onlineId = " + onlineId;
+    }
 }
